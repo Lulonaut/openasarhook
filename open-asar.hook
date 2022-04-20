@@ -1,0 +1,9 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = discord*
+
+[Action]
+When = PostTransaction
+Exec = /etc/pacman.d/hooks/bin/openasar
