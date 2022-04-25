@@ -3,6 +3,7 @@
 while IFS= read -r line; do
 	file=$line/resources/app.asar
 	mv $file $file.backup
-	wget -q -O $file https://github.com/GooseMod/OpenAsar/releases/download/nightly/app.asar
-	echo "Installed OpenAsar for $line. If you have issues with launching rename $file.backup back to app.asar"
+	wget -q -O $file https://github.com/GooseMod/OpenAsar/releases/download/nightly/app.asar && 
+	echo "Installed OpenAsar for $line. If you have issues with launching rename $file.backup back to app.asar" ||
+	echo "Failed to invoke wget, maybe its not installed?"
 done <<< $(find /opt -type d -name "discord*")
