@@ -7,3 +7,4 @@ Target = discord*
 [Action]
 When = PostTransaction
 Exec = /etc/pacman.d/hooks/bin/openasar
+NeedsTargets
