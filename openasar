@@ -1,9 +1,31 @@
 #!/bin/sh
 
-while IFS= read -r line; do
-	file=$line/resources/app.asar
-	mv $file $file.backup
-	wget -q -O $file https://github.com/GooseMod/OpenAsar/releases/download/nightly/app.asar && 
-	echo "Installed OpenAsar for $line. If you have issues with launching rename $file.backup back to app.asar" ||
-	echo "Failed to invoke wget, maybe its not installed?"
-done <<< $(find /opt -maxdepth 2 -type d -name "discord*")
+while IFS= read -r target
+do
+	echo "Finding discord's app.asar file..."
+	
+	file="null"
+
+	while IFS= read -r path
+	do
+		result=$(expr "$path" : "$target /..*/app\\.asar\$")
+
+		if [ "$result" -gt "0" ] 
+		then
+			file=$(expr substr "$path" "$((${#target}+1))" "${#path}")
+		fi
+	done <<< $(pacman -Ql $target)
+
+	echo target $target
+	echo file $file
+
+	if [ "$file" = 'null' ]
+	then
+		echo "Unable to find discord's app.asar!"
+	else
+		mv $file $file.backup
+		wget -q -O $file https://github.com/GooseMod/OpenAsar/releases/download/nightly/app.asar && 
+		echo "Installed OpenAsar for $file. If you have issues with launching rename $file.backup back to app.asar" ||
+		echo "Failed to invoke wget, maybe its not installed?"
+	fi
+done
