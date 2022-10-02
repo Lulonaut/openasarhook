@@ -12,7 +12,11 @@ do
 
 		if [ "$result" -gt "0" ] 
 		then
-			file=$(expr substr "$path" "$((${#target}+1))" "${#path}")
+			file=$(expr substr "$path" "$((${#target}+2))" "${#path}")
+
+			#Test if kernel is installed
+			kernel_file="${file/app.asar/app-original.asar}"
+			[ -f "${file/app.asar/app-original.asar}" ] && file="$kernel_file"
 		fi
 	done <<< $(pacman -Ql $target)
 
